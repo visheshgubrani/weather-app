@@ -11,6 +11,8 @@ response = requests.get(request_url)
 
 weather_data = response.json()
 
-current_temp = weather_data["current"]["temp_c"]
+current_temp = weather_data["current"]["temp_c"]["humidity"]
 
 print(f"Temprature of India is {current_temp}C")
+
+city = input()
