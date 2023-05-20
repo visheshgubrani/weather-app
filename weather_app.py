@@ -1,6 +1,7 @@
 import requests
 import json
 import tkinter as tk
+import urllib.request
 
 base_url = "http://api.weatherapi.com/v1"
 api_key = "e69e523d9ed04abf8a2162555231705"
