@@ -1,5 +1,6 @@
 import requests
 import json
+import tkinter as tk
 
 base_url = "http://api.weatherapi.com/v1"
 api_key = "e69e523d9ed04abf8a2162555231705"
@@ -11,6 +12,7 @@ def get_current_weather(country):
     weather_data = response.json()
     current_temp = weather_data["current"]["temp_c"]
     return current_temp
+
 
 def get_forecast(city, days):
     endpoint = "/forecast.json"
@@ -27,28 +29,63 @@ def get_air_quality(city):
     air_quality_index = air_quality_data["current"]["air_quality"]["pm2_5"]
     return air_quality_index
 
-def main():
-    country = input("Select the country: ")
-    city = input("Select the city: ")
-    num_days = int(input("Enter the No. of days: "))
-    
+def get_weather():
+    country = enter_country.get()
+    city = enter_city.get()
+    n_days = int(enter_days.get())
 
     current_temp = get_current_weather(country)
-    print(f"Temprature in {city}, {country} is {current_temp}C")
-    
-    def print_forecast(forecast_data):
-        forecast_days = forecast_data["forecast"]["forecastday"]
+    label_temp.config(text=f"Temprature in {city}, {country} is {current_temp} ")
 
-        for day in forecast_days:
-            forecast_date = day["date"]
-            forecast_temp = day["day"]["avgtemp_c"]
-            print(f"forecast for {forecast_date}: {forecast_temp}C")
-    forecast_data = get_forecast(city, num_days)
-    print_forecast(forecast_data)
-    
-    
+    forecast_data = get_forecast(city, n_days)
+    forecast_days = forecast_data["forecast"]["forecastday"]
+
+    forecast_text = ""
+    for day in forecast_days:
+        forecast_date = day["date"]
+        forecast_temp = day["day"]["avgtemp_c"]
+        forecast_text += f"forecast for {forecast_date} is {forecast_temp}C\n"
+    label_forecast.config(text=forecast_text)
+
     air_quality_index = get_air_quality(city)
-    print(f"AQI in {city} is {air_quality_index}")
+    label_aqi.config(text=f"Air Quality Index in {city} is {air_quality_index}")
 
-if __name__ == "__main__":
-    main()
+window = tk.Tk()
+
+label_country = tk.Label(window, text="Select the Country:")
+label_country.pack()
+
+enter_country = tk.Entry(window)
+enter_country.pack()
+
+label_city = tk.Label(window, text="Enter the city here:")
+label_city.pack()
+
+enter_city = tk.Entry(window)
+enter_city.pack()
+
+label_days = tk.Label(window, text="Enter the no. of days:")
+label_days.pack()
+
+enter_days = tk.Entry(window)
+enter_days.pack()
+
+button = tk.Button(window, text="Get Weather", command=get_weather)
+button.pack()
+
+label_temp = tk.Label(window)
+label_temp.pack()
+
+label_forecast = tk.Label(window)
+label_forecast.pack()
+
+label_aqi = tk.Label(window)
+label_aqi.pack()
+
+window.mainloop()
+
+
+
+
+
+
